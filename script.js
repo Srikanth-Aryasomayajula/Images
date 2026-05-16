@@ -16,27 +16,39 @@ async function uploadImage() {
     return;
   }
 
+  const status = document.createElement("div");
+  status.innerText = "⏳ Uploading...";
+  status.style.marginTop = "10px";
+  document.querySelector(".upload-box").appendChild(status);
+
   const formData = new FormData();
   formData.append("file", file);
   formData.append("caption", caption);
   formData.append("filename", Date.now() + "-" + file.name);
 
-  const res = await fetch("https://image-vault-api.thethoughtgenie.workers.dev/upload", {
-    method: "POST",
-    body: formData
-  });
+  try {
+    const res = await fetch("https://image-vault-api.thethoughtgenie.workers.dev/upload", {
+      method: "POST",
+      body: formData
+    });
 
-  const text = await res.text();
+    const data = await res.json();
 
-  if (!res.ok) {
-    alert("Upload failed: " + text);
-    return;
+    if (!res.ok) {
+      throw new Error(data.message || "Upload failed");
+    }
+
+    // 🎉 SUCCESS = "green tick moment"
+    status.innerText = "✅ Upload complete! Repo updated";
+
+    setTimeout(() => status.remove(), 3000);
+
+    loadData();
+
+  } catch (err) {
+    status.innerText = "❌ Upload failed";
+    console.error(err);
   }
-
-  alert("Upload successful!");
-
-  // reload gallery immediately
-  loadData();
 }
 
 function render(list) {
