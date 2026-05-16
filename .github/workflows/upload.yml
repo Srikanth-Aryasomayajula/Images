@@ -4,6 +4,9 @@ on:
   issues:
     types: [opened]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,19 +15,29 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       - name: Process upload issue
         run: |
-          echo "Processing issue..."
+          echo "🚀 Processing issue..."
 
-          BODY='${{ github.event.issue.body }}'
+          echo '${{ github.event.issue.body }}' > payload.json
 
-          echo "$BODY" > payload.json
+          cat payload.json
 
           FILENAME=$(jq -r '.filename' payload.json)
           CAPTION=$(jq -r '.caption' payload.json)
           IMAGE=$(jq -r '.image' payload.json)
 
-          echo "$IMAGE" | base64 --decode > images/$FILENAME
+          echo "📄 Filename: $FILENAME"
+          echo "📝 Caption: $CAPTION"
+
+          if [ ! -d "images" ]; then
+            mkdir images
+          fi
+
+          echo "$IMAGE" | base64 --decode > "images/$FILENAME"
 
           FILE="data.json"
 
@@ -39,21 +52,23 @@ jobs:
 
           mv tmp.json $FILE
 
+          echo "✅ Files updated"
+
       - name: Commit changes
         run: |
           git config user.name "image-vault-bot"
           git config user.email "bot@users.noreply.github.com"
 
-          git add .
-          git commit -m "upload image"
+          git add images data.json
+
+          git commit -m "upload image" || echo "No changes to commit"
+
           git push
 
       - name: Close issue
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           curl -X PATCH \
-            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }} \
             -d '{"state":"closed"}'
