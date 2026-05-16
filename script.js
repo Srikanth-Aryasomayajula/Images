@@ -63,7 +63,7 @@ function render(list) {
 					src="${img.file}"
 					alt="${img.caption}"
 					title="${img.caption}"
-					onclick="openModal('${img.file}')"
+					onclick="openModal('${img.file}', '${img.id}')"
 					loading="lazy"
 				>
 				<div class="caption">${img.caption}</div>
@@ -72,7 +72,7 @@ function render(list) {
     });
 }
 
-function openModal(src) {
+function openModal(src, id) {
     const modal = document.getElementById("modal");
     const modalImg = document.getElementById("modalImg");
     const downloadBtn = document.getElementById("downloadBtn");
@@ -80,10 +80,14 @@ function openModal(src) {
     modal.style.display = "flex";
     modalImg.src = src;
     downloadBtn.href = src;
+
+    // 🔥 update URL without reload
+    history.pushState(null, "", `/image/${id}`);
 }
 
 document.getElementById("close").onclick = () => {
     document.getElementById("modal").style.display = "none";
+    history.pushState(null, "", "/");
 };
 
 document.getElementById("searchInput").addEventListener("input", (e) => {
@@ -99,3 +103,18 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
 });
 
 loadData();
+
+window.addEventListener("load", async () => {
+    const path = window.location.pathname;
+
+    if (path.startsWith("/image/")) {
+        const id = path.split("/image/")[1];
+
+        const res = await fetch(`https://image-vault-api.thethoughtgenie.workers.dev/image/${id}`);
+        const data = await res.json();
+
+        if (data.file) {
+            openModal(data.file, data.id);
+        }
+    }
+});
