@@ -32,7 +32,14 @@ async function uploadImage() {
       body: formData
     });
 
-    const data = await res.json();
+    const text = await res.text();
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      data = { success: true };
+    }
 
     if (!res.ok) {
       throw new Error(data.message || "Upload failed");
