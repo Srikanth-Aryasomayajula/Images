@@ -3,5 +3,10 @@
     "id": "palm",
     "file": "images/1778961374083-5.jpg.jpeg",
     "caption": "palm"
+  },
+  {
+    "id": "test",
+    "file": "images/1778962378275-1.png",
+    "caption": "test"
   }
 ]
