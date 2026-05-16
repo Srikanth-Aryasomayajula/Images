@@ -85,11 +85,11 @@ function openModal(src, id) {
 
     // 🔥 update URL without reload
     const extension = "jpg"; // or dynamic if you store it later
-	history.pushState(null, "", `/image/${id}.${extension}`);
+	history.pushState(null, "", `/ImageVault/image/${id}.${extension}`);
 }
 
 async function getAI() {
-  const path = window.location.pathname;
+  const path = window.location.pathname.replace("/ImageVault", "");
 
   const res = await fetch(`https://image-vault-api.thethoughtgenie.workers.dev${path}/ai`);
   const data = await res.json();

@@ -104,6 +104,15 @@ button {
 }
 
 #downloadBtn {
-  margin-top: 10px;
-  color: white;
+  background: #161a22;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+#ai-box {
+  background: #161a22;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
