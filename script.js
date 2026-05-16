@@ -29,25 +29,24 @@ async function uploadImage() {
     const base64 = await toBase64(file);
     const filename = Date.now() + "-" + file.name;
 
-    const body = {
-        filename,
-        caption,
-        image: base64
-    };
-
-    await fetch("https://api.github.com/repos/srikanth-aryasomayajula/ImageVault/issues", {
+    const res = await fetch("https://image-vault-api.thethoughtgenie.workers.dev", {
         method: "POST",
         headers: {
-            "Accept": "application/vnd.github+json",
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            title: "upload-image",
-            body: JSON.stringify(body)
+            filename,
+            caption,
+            image: base64
         })
     });
 
-    alert("Upload sent! It will appear shortly.");
+    if (res.ok) {
+        alert("Upload successful ✅");
+        loadData();
+    } else {
+        alert("Upload failed ❌");
+    }
 }
 
 function render(list) {
