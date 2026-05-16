@@ -1,8 +1,8 @@
 name: Image Upload API
 
 on:
-  repository_dispatch:
-    types: [upload-image]
+  issues:
+    types: [opened]
 
 jobs:
   upload:
