@@ -6,16 +6,6 @@ async function loadData() {
     render(images);
 }
 
-// convert file → base64
-function toBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(",")[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
-}
-
 // IMPORTANT: create GitHub issue (no auth needed)
 async function uploadImage() {
   const file = document.getElementById("fileInput").files[0];
@@ -31,7 +21,7 @@ async function uploadImage() {
   formData.append("caption", caption);
   formData.append("filename", Date.now() + "-" + file.name);
 
-  const res = await fetch("https://image-vault-api.thethoughtgenie.workers.dev", {
+  const res = await fetch("https://image-vault-api.thethoughtgenie.workers.dev/upload", {
     method: "POST",
     body: formData
   });
@@ -44,6 +34,9 @@ async function uploadImage() {
   }
 
   alert("Upload successful!");
+
+  // reload gallery immediately
+  loadData();
 }
 
 function render(list) {
