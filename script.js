@@ -9,7 +9,8 @@ async function loadData() {
 // IMPORTANT: create GitHub issue (no auth needed)
 async function uploadImage() {
   const file = document.getElementById("fileInput").files[0];
-  const caption = document.getElementById("captionInput").value;
+  const caption = document.getElementById("captionInput").value.trim();
+  const id = caption.toLowerCase().replace(/\s+/g, "-");
 
   if (!file || !caption) {
     alert("Select file + caption");
@@ -24,6 +25,7 @@ async function uploadImage() {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("caption", caption);
+  formData.append("id", id);
   formData.append("filename", Date.now() + "-" + file.name);
 
   try {
@@ -56,19 +58,42 @@ function render(list) {
 
     list.forEach(img => {
         gallery.innerHTML += `
-            <div class="card">
-                <img src="${img.file}">
-                <div class="caption">${img.caption}</div>
-            </div>
-        `;
+			<div class="card" data-id="${img.id}">
+				<img 
+					src="${img.file}"
+					alt="${img.caption}"
+					title="${img.caption}"
+					onclick="openModal('${img.file}')"
+					loading="lazy"
+				>
+				<div class="caption">${img.caption}</div>
+			</div>
+		`;
     });
 }
+
+function openModal(src) {
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modalImg");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    modal.style.display = "flex";
+    modalImg.src = src;
+    downloadBtn.href = src;
+}
+
+document.getElementById("close").onclick = () => {
+    document.getElementById("modal").style.display = "none";
+};
 
 document.getElementById("searchInput").addEventListener("input", (e) => {
     const q = e.target.value.toLowerCase();
 
     const filtered = images
-        .filter(img => img.caption.toLowerCase().includes(q));
+        .filter(img =>
+			img.caption.toLowerCase().includes(q) ||
+			img.id.toLowerCase().includes(q)
+		);
 
     render(filtered);
 });
