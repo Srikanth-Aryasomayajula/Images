@@ -40,9 +40,11 @@ async function uploadImage() {
         throw new Error(data.message || "Upload failed");
       }
     
-      status.innerText = "✅ Upload completed and Repo updated. Wait for 30-45 seconds and refresh the page to see the uploaded image";
+      status.innerText = "✅ Upload completed. Wait for 30-45 seconds and refresh the page to see the uploaded image";
     
-      setTimeout(() => status.remove(), 3000);
+      setTimeout(() => {
+		  location.reload();
+	  }, 5000);
     
       loadData();
     
@@ -82,7 +84,8 @@ function openModal(src, id) {
     downloadBtn.href = src;
 
     // 🔥 update URL without reload
-    history.pushState(null, "", `/image/${id}`);
+    const extension = "jpg"; // or dynamic if you store it later
+	history.pushState(null, "", `/image/${id}.${extension}`);
 }
 
 document.getElementById("close").onclick = () => {
@@ -108,7 +111,10 @@ window.addEventListener("load", async () => {
     const path = window.location.pathname;
 
     if (path.startsWith("/image/")) {
-        const id = path.split("/image/")[1];
+        let id = path.split("/image/")[1];
+		
+		// remove extension if present
+		id = id.replace(/\.(jpg|jpeg|png|webp)$/i, "");
 
         const res = await fetch(`https://image-vault-api.thethoughtgenie.workers.dev/image/${id}`);
         const data = await res.json();
