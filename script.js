@@ -35,7 +35,7 @@ async function uploadImage() {
         image: base64
     };
 
-    await fetch("https://api.github.com/repos/srikanth-aryasomayajula/Images/issues", {
+    await fetch("https://api.github.com/repos/srikanth-aryasomayajula/ImageVault/issues", {
         method: "POST",
         headers: {
             "Accept": "application/vnd.github+json",
