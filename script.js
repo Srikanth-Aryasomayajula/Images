@@ -38,7 +38,7 @@ async function uploadImage() {
         throw new Error(data.message || "Upload failed");
       }
     
-      status.innerText = "✅ Upload complete! Repo updated";
+      status.innerText = "✅ Upload completed and Repo updated. Wait for 30-45 seconds and refresh the page to see the uploaded image";
     
       setTimeout(() => status.remove(), 3000);
     
