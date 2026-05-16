@@ -1,17 +1,16 @@
 const OWNER = "srikanth-aryasomayajula";
 const REPO = "Images";
-const TOKEN = CONFIG.token;
 
 let images = [];
 
-// Load JSON
+// Load data.json
 async function loadData() {
     const res = await fetch("data.json");
     images = await res.json();
     render(images);
 }
 
-// Convert file → base64
+// Convert file to base64
 function toBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -21,82 +20,39 @@ function toBase64(file) {
     });
 }
 
-// Upload image to GitHub
-async function uploadToGitHub(file, filename, base64) {
-    const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/images/${filename}`;
-
-    const res = await fetch(url, {
-        method: "PUT",
-        headers: {
-            "Authorization": `Bearer ${TOKEN}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            message: "upload image",
-            content: base64
-        })
-    });
-
-    return res.json();
-}
-
-// Update data.json
-async function updateJSON(newEntry) {
-    const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/data.json`;
-
-    // get current file
-    const getRes = await fetch(url, {
-        headers: {
-            "Authorization": `Bearer ${TOKEN}`
-        }
-    });
-
-    const fileData = await getRes.json();
-    const content = atob(fileData.content);
-    const json = JSON.parse(content);
-
-    json.push(newEntry);
-
-    const updatedContent = btoa(JSON.stringify(json, null, 2));
-
-    await fetch(url, {
-        method: "PUT",
-        headers: {
-            "Authorization": `Bearer ${TOKEN}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            message: "update data.json",
-            content: updatedContent,
-            sha: fileData.sha
-        })
-    });
-}
-
-// Upload flow
+// Trigger GitHub Action (backend)
 async function uploadImage() {
     const file = document.getElementById("fileInput").files[0];
     const caption = document.getElementById("captionInput").value;
 
-    if (!file || !caption) return alert("Missing file or caption");
+    if (!file || !caption) {
+        alert("Select file + caption");
+        return;
+    }
 
     const base64 = await toBase64(file);
     const filename = Date.now() + "-" + file.name;
 
-    await uploadToGitHub(file, filename, base64);
+    await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/dispatches`, {
+        method: "POST",
+        headers: {
+            "Accept": "application/vnd.github+json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            event_type: "upload-image",
+            client_payload: {
+                filename: filename,
+                caption: caption,
+                image: base64
+            }
+        })
+    });
 
-    const newEntry = {
-        file: "images/" + filename,
-        caption: caption.toLowerCase()
-    };
-
-    await updateJSON(newEntry);
-
-    alert("Uploaded!");
-    loadData();
+    alert("Upload sent! Refresh in a few seconds.");
 }
 
-// search AI-like scoring
+// AI-like search
 function score(text, query) {
     text = text.toLowerCase();
     query = query.toLowerCase();

@@ -19,14 +19,37 @@ header {
     padding: 20px;
 }
 
+.upload-box, .search-box {
+    background: #161a22;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
 input {
     width: 100%;
     padding: 12px;
-    margin-bottom: 20px;
+    margin-top: 8px;
     border-radius: 8px;
     border: none;
-    background: #161a22;
+    background: #0f1115;
     color: white;
+    border: 1px solid #333;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    background: #2575fc;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #6a11cb;
 }
 
 .grid {
