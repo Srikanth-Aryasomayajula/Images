@@ -8,5 +8,10 @@
     "id": "test2",
     "file": "images/1778957307532-5.jpg.jpeg",
     "caption": "test2"
+  },
+  {
+    "id": "bookorder",
+    "file": "images/1778958878195-AmazonOrderDeutschBuch.png",
+    "caption": "bookorder"
   }
 ]
