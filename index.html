@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Image Memory Vault</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Vault</title>
 
-<link rel="stylesheet" href="styles.css"/>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>📁 Image Memory Vault</header>
+<header>📁 Image Vault</header>
 
 <div class="container">
 
-    <!-- Upload -->
+    <!-- Upload Section -->
     <div class="upload-box">
         <h3>Upload Image</h3>
-        <input type="file" id="imgInput" accept="image/*"/>
-        <input type="text" id="captionInput" placeholder="Enter caption (e.g. aloe plant rot, kitchen table plant)..."/>
-        <button onclick="uploadImage()">Save Image</button>
+
+        <input type="file" id="fileInput" accept="image/*">
+        <input type="text" id="captionInput" placeholder="Enter caption (e.g. aloe plant rot, desk setup)">
+
+        <button onclick="uploadImage()">Upload</button>
     </div>
 
-    <!-- Search -->
+    <!-- Search Section -->
     <div class="search-box">
         <h3>Search Images</h3>
-        <input type="text" id="searchInput" oninput="renderImages()" placeholder="Type description..."/>
+
+        <input type="text" id="searchInput" placeholder="Type to search...">
     </div>
 
     <!-- Gallery -->
@@ -33,6 +36,8 @@
 
 </div>
 
+<!-- Your logic (GitHub API + rendering + search) -->
 <script src="script.js"></script>
+
 </body>
 </html>

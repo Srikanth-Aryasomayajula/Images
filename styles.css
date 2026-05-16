@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background: #0f1115;
     color: #e6e6e6;
 }
@@ -9,8 +9,7 @@ header {
     padding: 20px;
     text-align: center;
     font-size: 22px;
-    font-weight: bold;
-    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    background: linear-gradient(90deg,#6a11cb,#2575fc);
     color: white;
 }
 
@@ -20,37 +19,14 @@ header {
     padding: 20px;
 }
 
-.upload-box, .search-box {
-    background: #161a22;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.4);
-}
-
-input, button {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 6px;
-    border: none;
-}
-
 input {
-    width: calc(100% - 22px);
-    background: #0f1115;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: none;
+    background: #161a22;
     color: white;
-    border: 1px solid #333;
-}
-
-button {
-    background: #2575fc;
-    color: white;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-button:hover {
-    background: #6a11cb;
 }
 
 .grid {
@@ -61,25 +37,18 @@ button:hover {
 
 .card {
     background: #161a22;
-    padding: 10px;
     border-radius: 10px;
-    text-align: center;
-    transition: 0.2s;
+    overflow: hidden;
 }
 
-.card:hover {
-    transform: scale(1.03);
-}
-
-img {
+.card img {
     width: 100%;
-    border-radius: 8px;
     height: 140px;
     object-fit: cover;
 }
 
 .caption {
-    margin-top: 8px;
-    font-size: 13px;
+    padding: 8px;
+    font-size: 12px;
     color: #aaa;
 }
