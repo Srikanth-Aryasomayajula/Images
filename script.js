@@ -1,5 +1,6 @@
 const OWNER = "srikanth-aryasomayajula";
 const REPO = "Images";
+const TOKEN = "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";
 
 let images = [];
 
@@ -33,21 +34,22 @@ async function uploadImage() {
     const base64 = await toBase64(file);
     const filename = Date.now() + "-" + file.name;
 
-    await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/dispatches`, {
-        method: "POST",
-        headers: {
-            "Accept": "application/vnd.github+json",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            event_type: "upload-image",
-            client_payload: {
-                filename: filename,
-                caption: caption,
-                image: base64
-            }
-        })
-    });
+	await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/dispatches`, {
+		method: "POST",
+		headers: {
+			"Accept": "application/vnd.github+json",
+			"Authorization": `Bearer ${TOKEN}`,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			event_type: "upload-image",
+			client_payload: {
+				filename: filename,
+				caption: caption,
+				image: base64
+			}
+		})
+	});
 
     alert("Upload sent! Refresh in a few seconds.");
 }
