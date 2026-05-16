@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
+
 <title>Image Vault</title>
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -27,7 +29,9 @@
 <div id="modal" class="modal">
   <span id="close">&times;</span>
   <img id="modalImg">
-  <a id="downloadBtn" download>⬇ Download</a>
+  <button id="aiBtn" onclick="getAI()">AI Analysis</button>
+  <div id="ai-box"></div>
+  <a id="downloadBtn" download>Download</a>
 </div>
 
 <script src="script.js"></script>

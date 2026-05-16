@@ -88,6 +88,16 @@ function openModal(src, id) {
 	history.pushState(null, "", `/image/${id}.${extension}`);
 }
 
+async function getAI() {
+  const path = window.location.pathname;
+
+  const res = await fetch(`https://image-vault-api.thethoughtgenie.workers.dev${path}/ai`);
+  const data = await res.json();
+
+  document.getElementById("ai-box").innerText =
+    data.description || "No AI result";
+}
+
 document.getElementById("close").onclick = () => {
     document.getElementById("modal").style.display = "none";
     history.pushState(null, "", "/");
