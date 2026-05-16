@@ -18,35 +18,32 @@ function toBase64(file) {
 
 // IMPORTANT: create GitHub issue (no auth needed)
 async function uploadImage() {
-    const file = document.getElementById("fileInput").files[0];
-    const caption = document.getElementById("captionInput").value;
+  const file = document.getElementById("fileInput").files[0];
+  const caption = document.getElementById("captionInput").value;
 
-    if (!file || !caption) {
-        alert("Select file + caption");
-        return;
-    }
+  if (!file || !caption) {
+    alert("Select file + caption");
+    return;
+  }
 
-    const base64 = await toBase64(file);
-    const filename = Date.now() + "-" + file.name;
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("caption", caption);
+  formData.append("filename", Date.now() + "-" + file.name);
 
-    const res = await fetch("https://image-vault-api.thethoughtgenie.workers.dev", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            filename,
-            caption,
-            image: base64
-        })
-    });
+  const res = await fetch("https://image-vault-api.thethoughtgenie.workers.dev", {
+    method: "POST",
+    body: formData
+  });
 
-    if (res.ok) {
-        alert("Upload successful ✅");
-        loadData();
-    } else {
-        alert("Upload failed ❌");
-    }
+  const text = await res.text();
+
+  if (!res.ok) {
+    alert("Upload failed: " + text);
+    return;
+  }
+
+  alert("Upload successful!");
 }
 
 function render(list) {
